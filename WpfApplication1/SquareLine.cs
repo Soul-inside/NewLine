@@ -9,7 +9,7 @@ namespace WpfApplication1
 	{
 		StreamGeometry geometry = new StreamGeometry();
 
-		// Dependency properties
+		// Dependency properties kolbasa
 		public static readonly DependencyProperty StartPointProperty =
 			LineGeometry.StartPointProperty.AddOwner(
 				typeof(SquareLine),
