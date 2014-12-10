@@ -22,30 +22,19 @@ namespace WpfApplication1
 		#region init
 
 		/// <summary>
-		///     Сравнение точек прямоугольника для выделения области
-		/// </summary>
-		/// <param name="X">Первая точка</param>
-		/// <param name="Y">Вторая точка</param>
-		/// <returns></returns>
-		private bool checkRect(Point X, Point Y)
-		{
-			return X.X > Y.X;
-		}
-
-		/// <summary>
 		///     координаты прямоугольника для выделения области
 		/// </summary>
-		private static Rectangle defRectangle = new Rectangle();
+		private static Rectangle _defRectangle = new Rectangle();
 
 		/// <summary>
 		///     координаты первой точки прямоугольника для выделения области
 		/// </summary>
-		private static Point defRectangleFirst;
+		private static Point _defRectangleFirst;
 
 		/// <summary>
 		///     Координаты второй точки прямоугольника для выделения области
 		/// </summary>
-		private static Point defRectangleSecond;
+		private static Point _defRectangleSecond;
 
 		/// <summary>
 		///     Список всех нарисованных прямоугольников
@@ -55,32 +44,32 @@ namespace WpfApplication1
 		/// <summary>
 		///     Ломаная зеленая линия
 		/// </summary>
-		private readonly Polyline Pl_green = new Polyline {Stroke = Brushes.Green, StrokeThickness = 2, FillRule = FillRule.EvenOdd};
+		private readonly Polyline _plGreen = new Polyline {Stroke = Brushes.Green, StrokeThickness = 2, FillRule = FillRule.EvenOdd};
 
 		/// <summary>
 		///     Ломаная красная линия
 		/// </summary>
-		private readonly Polyline Pl_red = new Polyline {Stroke = Brushes.Red, StrokeThickness = 2, FillRule = FillRule.EvenOdd};
+		private readonly Polyline _plRed = new Polyline {Stroke = Brushes.Red, StrokeThickness = 2, FillRule = FillRule.EvenOdd};
 
 		/// <summary>
 		///     Временная зеленая линия
 		/// </summary>
-		private readonly SquareLine SLineGreen = new SquareLine {Stroke = Brushes.SpringGreen, StrokeThickness = 2, StrokeDashArray = new DoubleCollection {2}};
+		private readonly SquareLine _sLineGreen = new SquareLine {Stroke = Brushes.SpringGreen, StrokeThickness = 2, StrokeDashArray = new DoubleCollection {2}};
 
 		/// <summary>
 		///     Временная красная линия
 		/// </summary>
-		private readonly SquareLine SLineRed = new SquareLine {Stroke = Brushes.DarkRed, StrokeThickness = 2, StrokeDashArray = new DoubleCollection {2}};
+		private readonly SquareLine _sLineRed = new SquareLine {Stroke = Brushes.DarkRed, StrokeThickness = 2, StrokeDashArray = new DoubleCollection {2}};
 
 		/// <summary>
 		///     Первая зеленая линия
 		/// </summary>
-		private readonly Line tmpLineGreen = new Line {Stroke = Brushes.SpringGreen, StrokeThickness = 2, StrokeDashArray = new DoubleCollection {2}};
+		private readonly Line _tmpLineGreen = new Line {Stroke = Brushes.SpringGreen, StrokeThickness = 2, StrokeDashArray = new DoubleCollection {2}};
 
 		/// <summary>
 		///     Первая красная линия
 		/// </summary>
-		private readonly Line tmpLineRed = new Line {Stroke = Brushes.DarkRed, StrokeThickness = 2, StrokeDashArray = new DoubleCollection {2}};
+		private readonly Line _tmpLineRed = new Line {Stroke = Brushes.DarkRed, StrokeThickness = 2, StrokeDashArray = new DoubleCollection {2}};
 
 		/// <summary>
 		///     Тип линии
@@ -145,48 +134,48 @@ namespace WpfApplication1
 		private void CnvDraw_MouseMove(object sender, MouseEventArgs e)
 		{
 			// отрисовка линий строго в выделенной области
-			double CX = e.GetPosition(CnvDraw).X;
-			double CY = e.GetPosition(CnvDraw).Y;
-			if (CX > defRectangleSecond.X)
+			double cx = e.GetPosition(CnvDraw).X;
+			double cy = e.GetPosition(CnvDraw).Y;
+			if (cx > _defRectangleSecond.X)
 			{
-				CX = defRectangleSecond.X;
+				cx = _defRectangleSecond.X;
 			}
-			if (CY > defRectangleSecond.Y)
+			if (cy > _defRectangleSecond.Y)
 			{
-				CY = defRectangleSecond.Y;
+				cy = _defRectangleSecond.Y;
 			}
-			if (CX < defRectangleFirst.X)
+			if (cx < _defRectangleFirst.X)
 			{
-				CX = defRectangleFirst.X;
+				cx = _defRectangleFirst.X;
 			}
-			if (CY < defRectangleFirst.Y)
+			if (cy < _defRectangleFirst.Y)
 			{
-				CY = defRectangleFirst.Y;
+				cy = _defRectangleFirst.Y;
 			}
 			// для рисования зеленой линии
 			if (Type == 1)
 			{
-				if (Pl_green.Points.Count() > 1)
+				if (_plGreen.Points.Count() > 1)
 				{
-					SLineGreen.EndPoint = new Point(CX, CY);
+					_sLineGreen.EndPoint = new Point(cx, cy);
 				}
-				else if (Pl_green.Points.Any())
+				else if (_plGreen.Points.Any())
 				{
-					tmpLineGreen.X2 = tmpLineGreen.X1;
-					tmpLineGreen.Y2 = CY;
+					_tmpLineGreen.X2 = _tmpLineGreen.X1;
+					_tmpLineGreen.Y2 = cy;
 				}
 			}
 				//для рисования красной линии
 			else if (Type == 2)
 			{
-				if (Pl_red.Points.Count() > 1)
+				if (_plRed.Points.Count() > 1)
 				{
-					SLineRed.EndPoint = new Point(CX, CY);
+					_sLineRed.EndPoint = new Point(cx, cy);
 				}
-				else if (Pl_red.Points.Any())
+				else if (_plRed.Points.Any())
 				{
-					tmpLineRed.X2 = tmpLineRed.X1;
-					tmpLineRed.Y2 = CY;
+					_tmpLineRed.X2 = _tmpLineRed.X1;
+					_tmpLineRed.Y2 = cy;
 				}
 			}
 				// в случае рисования квадратиков
@@ -197,26 +186,26 @@ namespace WpfApplication1
 					_secondPoint = e.GetPosition(CnvDraw);
 					if (Type == 0)
 					{
-						defRectangleSecond = _secondPoint;
+						_defRectangleSecond = _secondPoint;
 					}
 					// для попадания квадратиков в область определения
 					if (Type == 3)
 					{
-						if (defRectangleSecond.X < _secondPoint.X)
+						if (_secondPoint.Y>_defRectangleSecond.Y)
 						{
-							_secondPoint.X = defRectangleSecond.X;
+							_secondPoint.Y = _defRectangleSecond.Y;
 						}
-						if (defRectangleSecond.Y < _secondPoint.Y)
+						if (_secondPoint.X>_defRectangleSecond.X)
 						{
-							_secondPoint.Y = defRectangleSecond.Y;
+							_secondPoint.X = _defRectangleSecond.X;
 						}
-						if (defRectangleFirst.X > _secondPoint.X)
+						if (_secondPoint.X < _defRectangleFirst.X)
 						{
-							_secondPoint.X = defRectangleFirst.X;
+							_secondPoint.X = _defRectangleFirst.X;
 						}
-						if (defRectangleFirst.Y > _secondPoint.Y)
+						if (_secondPoint.Y < _defRectangleFirst.Y)
 						{
-							_secondPoint.Y = defRectangleFirst.Y;
+							_secondPoint.Y = _defRectangleFirst.Y;
 						}
 					}
 					MoveDrawRectangle(_firstPoint, _secondPoint);
@@ -234,73 +223,73 @@ namespace WpfApplication1
 			if (_drawRectangle)
 			{
 				// отрисовка линий строго в выделенной области
-				double CX = e.GetPosition(CnvDraw).X;
-				double CY = e.GetPosition(CnvDraw).Y;
-				if (CX > defRectangleSecond.X)
+				double cx = e.GetPosition(CnvDraw).X;
+				double cy = e.GetPosition(CnvDraw).Y;
+				if (cx > _defRectangleSecond.X)
 				{
-					CX = defRectangleSecond.X;
+					cx = _defRectangleSecond.X;
 				}
-				if (CY > defRectangleSecond.Y)
+				if (cy > _defRectangleSecond.Y)
 				{
-					CY = defRectangleSecond.Y;
+					cy = _defRectangleSecond.Y;
 				}
-				if (CX < defRectangleFirst.X)
+				if (cx < _defRectangleFirst.X)
 				{
-					CX = defRectangleFirst.X;
+					cx = _defRectangleFirst.X;
 				}
-				if (CY < defRectangleFirst.Y)
+				if (cy < _defRectangleFirst.Y)
 				{
-					CY = defRectangleFirst.Y;
+					cy = _defRectangleFirst.Y;
 				}
 				// для рисования зеленой линии
 				if (Type == 1)
 				{
-					if (CnvDraw.Children.Contains(SLineGreen))
+					if (CnvDraw.Children.Contains(_sLineGreen))
 					{
-						if (!Pl_green.Points.Any())
+						if (!_plGreen.Points.Any())
 						{
-							Pl_green.Points.Add(new Point(CX, defRectangleFirst.Y));
-							tmpLineGreen.X1 = CX;
-							tmpLineGreen.Y1 = defRectangleFirst.Y;
+							_plGreen.Points.Add(new Point(cx, _defRectangleFirst.Y));
+							_tmpLineGreen.X1 = cx;
+							_tmpLineGreen.Y1 = _defRectangleFirst.Y;
 						}
-						else if (Pl_green.Points.Count() < 2)
+						else if (_plGreen.Points.Count() < 2)
 						{
-							Pl_green.Points.Add(new Point(tmpLineGreen.X1, CY));
-							SLineGreen.StartPoint = new Point(tmpLineGreen.X1, CY);
-							SLineGreen.EndPoint = new Point(tmpLineGreen.X1, CY);
-							CnvDraw.Children.Remove(tmpLineGreen);
+							_plGreen.Points.Add(new Point(_tmpLineGreen.X1, cy));
+							_sLineGreen.StartPoint = new Point(_tmpLineGreen.X1, cy);
+							_sLineGreen.EndPoint = new Point(_tmpLineGreen.X1, cy);
+							CnvDraw.Children.Remove(_tmpLineGreen);
 						}
 						else
 						{
-							Pl_green.Points.Add(new Point(CX, SLineGreen.StartPoint.Y));
-							Pl_green.Points.Add(new Point(CX, CY));
-							SLineGreen.StartPoint = SLineGreen.EndPoint;
+							_plGreen.Points.Add(new Point(cx, _sLineGreen.StartPoint.Y));
+							_plGreen.Points.Add(new Point(cx, cy));
+							_sLineGreen.StartPoint = _sLineGreen.EndPoint;
 						}
 					}
 				}
 					// для рисования красной линии
 				else if (Type == 2)
 				{
-					if (CnvDraw.Children.Contains(SLineRed))
+					if (CnvDraw.Children.Contains(_sLineRed))
 					{
-						if (!Pl_red.Points.Any())
+						if (!_plRed.Points.Any())
 						{
-							Pl_red.Points.Add(new Point(CX, defRectangleFirst.Y));
-							tmpLineRed.X1 = CX;
-							tmpLineRed.Y1 = defRectangleFirst.Y;
+							_plRed.Points.Add(new Point(cx, _defRectangleFirst.Y));
+							_tmpLineRed.X1 = cx;
+							_tmpLineRed.Y1 = _defRectangleFirst.Y;
 						}
-						else if (Pl_red.Points.Count() < 2)
+						else if (_plRed.Points.Count() < 2)
 						{
-							Pl_red.Points.Add(new Point(tmpLineRed.X1, CY));
-							SLineRed.StartPoint = new Point(tmpLineRed.X1, CY);
-							SLineRed.EndPoint = new Point(tmpLineRed.X1, CY);
-							CnvDraw.Children.Remove(tmpLineRed);
+							_plRed.Points.Add(new Point(_tmpLineRed.X1, cy));
+							_sLineRed.StartPoint = new Point(_tmpLineRed.X1, cy);
+							_sLineRed.EndPoint = new Point(_tmpLineRed.X1, cy);
+							CnvDraw.Children.Remove(_tmpLineRed);
 						}
 						else
 						{
-							Pl_red.Points.Add(new Point(CX, SLineRed.StartPoint.Y));
-							Pl_red.Points.Add(new Point(CX, CY));
-							SLineRed.StartPoint = SLineRed.EndPoint;
+							_plRed.Points.Add(new Point(cx, _sLineRed.StartPoint.Y));
+							_plRed.Points.Add(new Point(cx, cy));
+							_sLineRed.StartPoint = _sLineRed.EndPoint;
 						}
 					}
 				}
@@ -311,26 +300,26 @@ namespace WpfApplication1
 					// для прямоугольной области определения
 					if (Type == 0)
 					{
-						defRectangleFirst = _firstPoint;
+						_defRectangleFirst = _firstPoint;
 					}
 					// для попадания квадратиков в область определения
 					if (Type == 3)
 					{
-						if (defRectangleFirst.X > _firstPoint.X)
+						if (_firstPoint.Y > _defRectangleSecond.Y)
 						{
-							_firstPoint.X = defRectangleFirst.X;
+							_firstPoint.Y = _defRectangleSecond.Y;
 						}
-						if (defRectangleFirst.Y > _firstPoint.Y)
+						if (_firstPoint.X > _defRectangleSecond.X)
 						{
-							_firstPoint.Y = defRectangleFirst.Y;
+							_firstPoint.X = _defRectangleSecond.X;
 						}
-						if (defRectangleSecond.X< _firstPoint.X)
+						if (_firstPoint.X < _defRectangleFirst.X)
 						{
-							_firstPoint.X=defRectangleFirst.X;
+							_firstPoint.X = _defRectangleFirst.X;
 						}
-						if (defRectangleSecond.Y < _firstPoint.Y)
+						if (_firstPoint.Y < _defRectangleFirst.Y)
 						{
-							_firstPoint.Y = defRectangleFirst.Y;
+							_firstPoint.Y = _defRectangleFirst.Y;
 						}
 					}
 					MoveDrawRectangle(_firstPoint, _firstPoint);
@@ -351,8 +340,8 @@ namespace WpfApplication1
 		private void CnvDraw_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			// удаление временных линий
-			CnvDraw.Children.Remove(SLineGreen);
-			CnvDraw.Children.Remove(SLineRed);
+			CnvDraw.Children.Remove(_sLineGreen);
+			CnvDraw.Children.Remove(_sLineRed);
 		}
 
 		/// <summary>
@@ -398,13 +387,13 @@ namespace WpfApplication1
 			Type = 1;
 			try
 			{
-				CnvDraw.Children.Add(Pl_green);
-				CnvDraw.Children.Add(SLineGreen);
-				CnvDraw.Children.Add(tmpLineGreen);
-				SLineGreen.EndPoint = new Point();
-				SLineGreen.StartPoint = new Point();
-				tmpLineGreen.X1 = new double();
-				tmpLineGreen.X2 = new double();
+				CnvDraw.Children.Add(_plGreen);
+				CnvDraw.Children.Add(_sLineGreen);
+				CnvDraw.Children.Add(_tmpLineGreen);
+				_sLineGreen.EndPoint = new Point();
+				_sLineGreen.StartPoint = new Point();
+				_tmpLineGreen.X1 = new double();
+				_tmpLineGreen.X2 = new double();
 			}
 			catch (Exception)
 			{
@@ -421,13 +410,13 @@ namespace WpfApplication1
 			Type = 2;
 			try
 			{
-				CnvDraw.Children.Add(Pl_red);
-				CnvDraw.Children.Add(SLineRed);
-				CnvDraw.Children.Add(tmpLineRed);
-				SLineRed.EndPoint = new Point();
-				SLineRed.StartPoint = new Point();
-				tmpLineRed.X1 = new double();
-				tmpLineRed.X2 = new double();
+				CnvDraw.Children.Add(_plRed);
+				CnvDraw.Children.Add(_sLineRed);
+				CnvDraw.Children.Add(_tmpLineRed);
+				_sLineRed.EndPoint = new Point();
+				_sLineRed.StartPoint = new Point();
+				_tmpLineRed.X1 = new double();
+				_tmpLineRed.X2 = new double();
 			}
 			catch (Exception)
 			{
@@ -459,24 +448,24 @@ namespace WpfApplication1
 		private void BtClear_Click(object sender, RoutedEventArgs e)
 		{
 			// удаление зеленых линий
-			CnvDraw.Children.Remove(SLineGreen);
-			CnvDraw.Children.Remove(Pl_green);
-			CnvDraw.Children.Remove(tmpLineGreen);
-			Pl_green.Points.Clear();
-			SLineGreen.EndPoint = new Point();
-			SLineGreen.StartPoint = new Point();
-			tmpLineGreen.X1 = new double();
-			tmpLineGreen.X2 = new double();
+			CnvDraw.Children.Remove(_sLineGreen);
+			CnvDraw.Children.Remove(_plGreen);
+			CnvDraw.Children.Remove(_tmpLineGreen);
+			_plGreen.Points.Clear();
+			_sLineGreen.EndPoint = new Point();
+			_sLineGreen.StartPoint = new Point();
+			_tmpLineGreen.X1 = new double();
+			_tmpLineGreen.X2 = new double();
 
 			// удаление красных линий
-			CnvDraw.Children.Remove(SLineRed);
-			CnvDraw.Children.Remove(Pl_red);
-			CnvDraw.Children.Remove(tmpLineRed);
-			Pl_red.Points.Clear();
-			SLineRed.EndPoint = new Point();
-			SLineRed.StartPoint = new Point();
-			tmpLineRed.X1 = new double();
-			tmpLineRed.X2 = new double();
+			CnvDraw.Children.Remove(_sLineRed);
+			CnvDraw.Children.Remove(_plRed);
+			CnvDraw.Children.Remove(_tmpLineRed);
+			_plRed.Points.Clear();
+			_sLineRed.EndPoint = new Point();
+			_sLineRed.StartPoint = new Point();
+			_tmpLineRed.X1 = new double();
+			_tmpLineRed.X2 = new double();
 
 			// удаление квадратов
 			foreach (Rectangle item in _sqRect)
@@ -492,7 +481,7 @@ namespace WpfApplication1
 			try
 			{
 				// удаление выделения области определения
-				CnvDraw.Children.Remove(defRectangle);
+				CnvDraw.Children.Remove(_defRectangle);
 				_drawRectangle = false;
 			}
 			catch (Exception)
@@ -531,26 +520,26 @@ namespace WpfApplication1
 				// удаление зеленой линии
 				if (Type == 1)
 				{
-					if (Pl_green.Points.Count > 2)
+					if (_plGreen.Points.Count > 2)
 					{
-						Pl_green.Points.Remove(Pl_green.Points.Last());
-						Pl_green.Points.Remove(Pl_green.Points.Last());
-						SLineGreen.StartPoint = Pl_green.Points.Last();
+						_plGreen.Points.Remove(_plGreen.Points.Last());
+						_plGreen.Points.Remove(_plGreen.Points.Last());
+						_sLineGreen.StartPoint = _plGreen.Points.Last();
 					}
-					else if (Pl_green.Points.Count > 0)
+					else if (_plGreen.Points.Count > 0)
 					{
-						Pl_green.Points.Remove(Pl_green.Points.Last());
-						Pl_green.Points.Remove(Pl_green.Points.Last());
-						SLineGreen.StartPoint = new Point(0, 0);
-						SLineGreen.EndPoint = new Point(0, 0);
-						tmpLineGreen.X1 = 0;
-						tmpLineGreen.Y1 = 0;
-						tmpLineGreen.X2 = 0;
-						tmpLineGreen.Y2 = 0;
-						CnvDraw.Children.Add(tmpLineGreen);
+						_plGreen.Points.Remove(_plGreen.Points.Last());
+						_plGreen.Points.Remove(_plGreen.Points.Last());
+						_sLineGreen.StartPoint = new Point(0, 0);
+						_sLineGreen.EndPoint = new Point(0, 0);
+						_tmpLineGreen.X1 = 0;
+						_tmpLineGreen.Y1 = 0;
+						_tmpLineGreen.X2 = 0;
+						_tmpLineGreen.Y2 = 0;
+						CnvDraw.Children.Add(_tmpLineGreen);
 						try
 						{
-							CnvDraw.Children.Add(SLineGreen);
+							CnvDraw.Children.Add(_sLineGreen);
 						}
 						catch
 						{
@@ -561,26 +550,26 @@ namespace WpfApplication1
 				// удаление красной линии
 				else if (Type == 2)
 				{
-					if (Pl_red.Points.Count > 2)
+					if (_plRed.Points.Count > 2)
 					{
-						Pl_red.Points.Remove(Pl_red.Points.Last());
-						Pl_red.Points.Remove(Pl_red.Points.Last());
-						SLineRed.StartPoint = Pl_red.Points.Last();
+						_plRed.Points.Remove(_plRed.Points.Last());
+						_plRed.Points.Remove(_plRed.Points.Last());
+						_sLineRed.StartPoint = _plRed.Points.Last();
 					}
-					else if (Pl_red.Points.Count > 0)
+					else if (_plRed.Points.Count > 0)
 					{
-						Pl_red.Points.Remove(Pl_red.Points.Last());
-						Pl_red.Points.Remove(Pl_red.Points.Last());
-						SLineRed.StartPoint = new Point(0, 0);
-						SLineRed.EndPoint = new Point(0, 0);
-						tmpLineRed.X1 = 0;
-						tmpLineRed.Y1 = 0;
-						tmpLineRed.X2 = 0;
-						tmpLineRed.Y2 = 0;
-						CnvDraw.Children.Add(tmpLineRed);
+						_plRed.Points.Remove(_plRed.Points.Last());
+						_plRed.Points.Remove(_plRed.Points.Last());
+						_sLineRed.StartPoint = new Point(0, 0);
+						_sLineRed.EndPoint = new Point(0, 0);
+						_tmpLineRed.X1 = 0;
+						_tmpLineRed.Y1 = 0;
+						_tmpLineRed.X2 = 0;
+						_tmpLineRed.Y2 = 0;
+						CnvDraw.Children.Add(_tmpLineRed);
 						try
 						{
-							CnvDraw.Children.Add(SLineRed);
+							CnvDraw.Children.Add(_sLineRed);
 						}
 						catch
 						{
@@ -615,9 +604,9 @@ namespace WpfApplication1
 			Canvas.SetTop(_rect, _firstPoint.Y);
 			Canvas.SetLeft(_rect, _firstPoint.X);
 			CnvDraw.Children.Add(_rect);
-			defRectangle = _rect;
-			defRectangleFirst = _firstPoint;
-			defRectangleSecond = _secondPoint;
+			_defRectangle = _rect;
+			_defRectangleFirst = _firstPoint;
+			_defRectangleSecond = _secondPoint;
 			_drawRectangle = true;
 			Type = 0;
 		}
@@ -678,17 +667,28 @@ namespace WpfApplication1
 				CnvDraw.Children.Add(_rect);
 				_sqRect.Add(_rect);
 			}
-			// переопределение точек области определения, если область определения рисуется снизу вверх
+			// переопределение точек области определения, если область определения рисуется не сверху вниз
 			if (Type == 0)
 			{
-				if (checkRect(defRectangleFirst, defRectangleSecond))
-				{
-					var t = defRectangleFirst;
-					defRectangleFirst = defRectangleSecond;
-					defRectangleSecond = t;
-				}
+				OverrideRect();
 			}
 		}
+
+		/// <summary>
+		/// Переопределение точек выделения области определения
+		/// </summary>
+		private static void OverrideRect()
+		{
+			var p1 = new Point();
+			var p2 = new Point();
+			p1.X = Math.Min(_defRectangleFirst.X, _defRectangleSecond.X);
+			p1.Y = Math.Min(_defRectangleFirst.Y, _defRectangleSecond.Y);
+			p2.X = Math.Max(_defRectangleFirst.X, _defRectangleSecond.X);
+			p2.Y = Math.Max(_defRectangleFirst.Y, _defRectangleSecond.Y);
+			_defRectangleFirst = p1;
+			_defRectangleSecond = p2;
+		}
+
 
 		/// <summary>
 		///     Растянуть/Переместить прямоугольник на указанные координаты. Построение временного квадрата.
