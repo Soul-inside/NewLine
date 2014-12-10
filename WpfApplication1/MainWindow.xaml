@@ -70,19 +70,19 @@
 						</LinearGradientBrush>
 					</Button.Background>
 				</Button>
-				<ToggleButton Name="TgBtOrange"
+				<Button Name="BtOrange"
 						Content="Оранжевая линия"
-						Checked="TgBtOrange_Checked"
+						Click="BtOrange_Click"
 					Margin="5">
-					<ToggleButton.Background>
+					<Button.Background>
 						<LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
 							<GradientStop Color="#FFF3F3F3" Offset="0"/>
 							<GradientStop Color="#FFEBEBEB"/>
 							<GradientStop Color="#FFDDDDDD"/>
 							<GradientStop Color="#e69256" Offset="1"/>
 						</LinearGradientBrush>
-					</ToggleButton.Background>
-				</ToggleButton>
+					</Button.Background>
+				</Button>
 				<Slider Name="SliZoom"
 				Minimum="1" Maximum="2.5" Value="1.00"
 				SmallChange="0.25"
