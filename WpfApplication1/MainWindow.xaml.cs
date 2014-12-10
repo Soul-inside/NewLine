@@ -638,7 +638,7 @@ namespace WpfApplication1
 				rectangle.Width = (int) (_firstPoint.X - _secondPoint.X - _rect.StrokeThickness*2);
 				if (rectangle.Width < 2)
 				{
-					rectangle.Width = 0;
+					rectangle.Width = 2;
 				}
 			}
 				// рисуем вправо
@@ -648,7 +648,7 @@ namespace WpfApplication1
 				rectangle.Width = (int) (_secondPoint.X - _firstPoint.X);
 				if (rectangle.Width < 2)
 				{
-					rectangle.Width = 0;
+					rectangle.Width = 2;
 				}
 			}
 			// рисуем вверх
@@ -658,7 +658,7 @@ namespace WpfApplication1
 				rectangle.Height = (int) (_firstPoint.Y - _secondPoint.Y - _rect.StrokeThickness*2);
 				if (rectangle.Height < 2)
 				{
-					rectangle.Height = 0;
+					rectangle.Height = 2;
 				}
 			}
 				// рисуем вниз
@@ -668,7 +668,7 @@ namespace WpfApplication1
 				rectangle.Height = (int) (_secondPoint.Y - _firstPoint.Y - _rect.StrokeThickness*2);
 				if (rectangle.Height < 2)
 				{
-					rectangle.Height = 0;
+					rectangle.Height = 2;
 				}
 			}
 			// в случае рисования квадратиков оранжевых
@@ -703,24 +703,40 @@ namespace WpfApplication1
 				Canvas.SetLeft(_rect, pointRightBottom.X);
 				_rect.Width = pointLeftTop.X - pointRightBottom.X;
 				_rectForDraw.X = (int) pointRightBottom.X;
+				if (_rect.Width < 2)
+				{
+					_rect.Width = 2;
+				}
 			}
 			else
 			{
 				Canvas.SetLeft(_rect, pointLeftTop.X);
 				_rect.Width = pointRightBottom.X - pointLeftTop.X;
 				_rectForDraw.X = (int) pointLeftTop.X;
+				if (_rect.Width < 2)
+				{
+					_rect.Width = 2;
+				}
 			}
 			if (pointLeftTop.Y > pointRightBottom.Y)
 			{
 				Canvas.SetTop(_rect, pointRightBottom.Y);
 				_rect.Height = pointLeftTop.Y - pointRightBottom.Y;
 				_rectForDraw.Y = (int) pointRightBottom.Y;
+				if (_rect.Height < 2)
+				{
+					_rect.Height = 2;
+				}
 			}
 			else
 			{
 				Canvas.SetTop(_rect, pointLeftTop.Y);
 				_rect.Height = pointRightBottom.Y - pointLeftTop.Y;
 				_rectForDraw.Y = (int) pointLeftTop.Y;
+				if (_rect.Height < 2)
+				{
+					_rect.Height = 2;
+				}
 			}
 			_rectForDraw.Width = (int) _rect.Width;
 			_rectForDraw.Height = (int) _rect.Height;
