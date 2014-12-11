@@ -55,7 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="PlWrite.cs" />
-    <Compile Include="Require.cs" />
     <Compile Include="SquareLine.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

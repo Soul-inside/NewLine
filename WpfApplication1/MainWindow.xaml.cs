@@ -122,8 +122,8 @@ namespace WpfApplication1
 		{
 			ImgWell.MaxHeight = W.Height;
 			ImgWell.MaxWidth = W.Width;
-			CnvDraw.Height = ImgWell.Source.Height;
-			CnvDraw.Width = ImgWell.Source.Width;
+			CnvDraw.Height = ImgWell.Height;
+			CnvDraw.Width = ImgWell.Width;
 		}
 
 		/// <summary>
@@ -214,7 +214,7 @@ namespace WpfApplication1
 		}
 
 		/// <summary>
-		///     Нажатие левой кнопки мыши на канвасе содержащем изображение
+		///     Нажатие левой кнопки мыши на канвасе, содержащем изображение
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -437,7 +437,7 @@ namespace WpfApplication1
 			CnvDraw.Children.Add(_rect);
 			// добавление прямокгольника в список
 			_sqRect.Add(_rect);
-			_drawRectangle = true;
+			//_drawRectangle = true;
 		}
 
 		/// <summary>
@@ -599,6 +599,8 @@ namespace WpfApplication1
 		/// <param name="e"></param>
 		private void BtSelectArea_Click(object sender, RoutedEventArgs e)
 		{
+			// в случае повторного выделения области
+			BtClear_Click(null, null);
 			CnvDraw.Children.Remove(_rect);
 			_rect = new Rectangle {Stroke = Brushes.Red, StrokeThickness = 2, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top};
 			Canvas.SetTop(_rect, _firstPoint.Y);
@@ -613,7 +615,7 @@ namespace WpfApplication1
 
 		/// <summary>
 		///     Отпускание левой кнопки мыши на канвасе
-		///     Построение постоянного квадрата
+		///     Построение квадрата
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -630,7 +632,7 @@ namespace WpfApplication1
 					rectangle.Width = 2;
 				}
 			}
-				// рисуем вправо
+			// рисуем вправо
 			else
 			{
 				rectangle.X = (int) (_firstPoint.X);
@@ -743,5 +745,11 @@ namespace WpfApplication1
 		}
 
 		#endregion
+
+		private void ScaleTransform_Changed(object sender, EventArgs e)
+		{
+			CnvDraw.Height = ImgWell.Height;
+			CnvDraw.Width = ImgWell.Width;
+		}
 	}
 }

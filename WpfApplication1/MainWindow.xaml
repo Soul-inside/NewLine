@@ -106,6 +106,8 @@
 					HorizontalScrollBarVisibility="Auto"
 					Grid.Column="1">
 				<Canvas x:Name="CnvDraw"
+				VerticalAlignment="Stretch"
+				HorizontalAlignment="Stretch"
 				MouseMove="CnvDraw_MouseMove"
 				Background="Transparent"
 				ClipToBounds="True"
@@ -121,7 +123,7 @@
 					<Canvas.LayoutTransform>
 						<ScaleTransform
 							ScaleX="{Binding ElementName=SliZoom, Path=Value}"
-							ScaleY="{Binding ElementName=SliZoom, Path=Value}"/>
+							ScaleY="{Binding ElementName=SliZoom, Path=Value}" Changed="ScaleTransform_Changed" />
 					</Canvas.LayoutTransform>
 				</Canvas>
 			</ScrollViewer>
