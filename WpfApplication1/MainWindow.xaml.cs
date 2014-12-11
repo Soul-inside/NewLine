@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -122,8 +123,8 @@ namespace WpfApplication1
 		{
 			ImgWell.MaxHeight = W.Height;
 			ImgWell.MaxWidth = W.Width;
-			CnvDraw.Height = ImgWell.Height;
-			CnvDraw.Width = ImgWell.Width;
+			CnvDraw.Height = ImgWell.MaxHeight;
+			CnvDraw.Width = ImgWell.MaxWidth;
 		}
 
 		/// <summary>
@@ -218,8 +219,22 @@ namespace WpfApplication1
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		public static bool isFirstLine = false;
 		private void CnvDraw_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
+			// чтобы первая линия не строилась из начала координат
+			if(isFirstLine)
+			{
+				isFirstLine = false;
+				_tmpLineGreen.X1 = e.GetPosition(CnvDraw).X;
+				_tmpLineGreen.Y1 = e.GetPosition(CnvDraw).Y;
+				_tmpLineRed.X1 = e.GetPosition(CnvDraw).X;
+				_tmpLineRed.Y1 = e.GetPosition(CnvDraw).Y;
+				_tmpLineGreen.X2 = e.GetPosition(CnvDraw).X;
+				_tmpLineGreen.Y2 = e.GetPosition(CnvDraw).Y;
+				_tmpLineRed.X2 = e.GetPosition(CnvDraw).X;
+				_tmpLineRed.Y2 = e.GetPosition(CnvDraw).Y;
+			}
 			if (_drawRectangle)
 			{
 				// отрисовка линий строго в выделенной области
@@ -305,6 +320,7 @@ namespace WpfApplication1
 					// для попадания квадратиков в область определения
 					if (Type == 3)
 					{
+
 						if (_firstPoint.Y > _defRectangleSecond.Y)
 						{
 							_firstPoint.Y = _defRectangleSecond.Y;
@@ -327,6 +343,7 @@ namespace WpfApplication1
 			}
 			else if (Type > 0)
 			{
+
 				// если область определения не была задана
 				MessageBox.Show("Задайте область определения!", "Внимание");
 			}
@@ -384,6 +401,7 @@ namespace WpfApplication1
 		/// <param name="e"></param>
 		private void BtGreen_Click(object sender, RoutedEventArgs e)
 		{
+			isFirstLine = true;
 			Type = 1;
 			try
 			{
@@ -392,8 +410,6 @@ namespace WpfApplication1
 				CnvDraw.Children.Add(_tmpLineGreen);
 				_sLineGreen.EndPoint = new Point();
 				_sLineGreen.StartPoint = new Point();
-				_tmpLineGreen.X1 = new double();
-				_tmpLineGreen.X2 = new double();
 			}
 			catch (Exception)
 			{
@@ -407,6 +423,8 @@ namespace WpfApplication1
 		/// <param name="e"></param>
 		private void BtRed_Click(object sender, RoutedEventArgs e)
 		{
+			isFirstLine = true;
+
 			Type = 2;
 			try
 			{
@@ -415,8 +433,6 @@ namespace WpfApplication1
 				CnvDraw.Children.Add(_tmpLineRed);
 				_sLineRed.EndPoint = new Point();
 				_sLineRed.StartPoint = new Point();
-				_tmpLineRed.X1 = new double();
-				_tmpLineRed.X2 = new double();
 			}
 			catch (Exception)
 			{
@@ -434,6 +450,11 @@ namespace WpfApplication1
 			_rect = new Rectangle {Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed};
 			Canvas.SetTop(_rect, _firstPoint.Y);
 			Canvas.SetLeft(_rect, _firstPoint.X);
+			// для невидимости квадрата в начале координат
+			if (_rect.Height * _rect.Width < 4.5)
+			{
+				_rect.Visibility = Visibility.Hidden;
+			}
 			CnvDraw.Children.Add(_rect);
 			// добавление прямокгольника в список
 			_sqRect.Add(_rect);
@@ -454,8 +475,6 @@ namespace WpfApplication1
 			_plGreen.Points.Clear();
 			_sLineGreen.EndPoint = new Point();
 			_sLineGreen.StartPoint = new Point();
-			_tmpLineGreen.X1 = new double();
-			_tmpLineGreen.X2 = new double();
 
 			// удаление красных линий
 			CnvDraw.Children.Remove(_sLineRed);
@@ -464,8 +483,6 @@ namespace WpfApplication1
 			_plRed.Points.Clear();
 			_sLineRed.EndPoint = new Point();
 			_sLineRed.StartPoint = new Point();
-			_tmpLineRed.X1 = new double();
-			_tmpLineRed.X2 = new double();
 
 			// удаление квадратов
 			foreach (Rectangle item in _sqRect)
@@ -530,12 +547,14 @@ namespace WpfApplication1
 					{
 						_plGreen.Points.Remove(_plGreen.Points.Last());
 						_plGreen.Points.Remove(_plGreen.Points.Last());
-						_sLineGreen.StartPoint = new Point(0, 0);
-						_sLineGreen.EndPoint = new Point(0, 0);
-						_tmpLineGreen.X1 = 0;
-						_tmpLineGreen.Y1 = 0;
-						_tmpLineGreen.X2 = 0;
-						_tmpLineGreen.Y2 = 0;
+						double x = _defRectangleFirst.X, y = _defRectangleFirst.Y;
+						_sLineGreen.StartPoint = _defRectangleFirst;
+						_sLineGreen.EndPoint = _defRectangleFirst;
+						_tmpLineGreen.X1 = x;
+						_tmpLineGreen.Y1 = y;
+						_tmpLineGreen.X2 = x;
+						_tmpLineGreen.Y2 = y;
+						isFirstLine = true;
 						CnvDraw.Children.Add(_tmpLineGreen);
 						try
 						{
@@ -560,12 +579,16 @@ namespace WpfApplication1
 					{
 						_plRed.Points.Remove(_plRed.Points.Last());
 						_plRed.Points.Remove(_plRed.Points.Last());
-						_sLineRed.StartPoint = new Point(0, 0);
-						_sLineRed.EndPoint = new Point(0, 0);
-						_tmpLineRed.X1 = 0;
-						_tmpLineRed.Y1 = 0;
-						_tmpLineRed.X2 = 0;
-						_tmpLineRed.Y2 = 0;
+						double x = _defRectangleFirst.X, y = _defRectangleFirst.Y;
+						_sLineRed.StartPoint = _defRectangleFirst;
+						_sLineRed.EndPoint = _defRectangleFirst;
+						_tmpLineRed.X1 = x;
+						_tmpLineRed.Y1 = y;
+						_tmpLineRed.X2 = x;
+						_tmpLineRed.Y2 = y;
+						isFirstLine = true;
+
+						
 						CnvDraw.Children.Add(_tmpLineRed);
 						try
 						{
@@ -609,6 +632,10 @@ namespace WpfApplication1
 			_defRectangle = _rect;
 			_defRectangleFirst = _firstPoint;
 			_defRectangleSecond = _secondPoint;
+			if (_defRectangleFirst.X == _defRectangleSecond.X && _defRectangleFirst.Y == _defRectangleSecond.Y)
+			{
+				_defRectangle.Visibility = Visibility.Hidden;
+			}
 			_drawRectangle = true;
 			Type = 0;
 		}
@@ -621,15 +648,16 @@ namespace WpfApplication1
 		/// <param name="e"></param>
 		private void CnvDraw_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
+
 			var rectangle = new Int32Rect();
 			// рисуем влево
 			if (_firstPoint.X > _secondPoint.X)
 			{
 				rectangle.X = (int) (_secondPoint.X + _rect.StrokeThickness);
 				rectangle.Width = (int) (_firstPoint.X - _secondPoint.X - _rect.StrokeThickness*2);
-				if (rectangle.Width < 2)
+				if (rectangle.Width < 1)
 				{
-					rectangle.Width = 2;
+					rectangle.Width = 1;
 				}
 			}
 			// рисуем вправо
@@ -637,9 +665,9 @@ namespace WpfApplication1
 			{
 				rectangle.X = (int) (_firstPoint.X);
 				rectangle.Width = (int) (_secondPoint.X - _firstPoint.X);
-				if (rectangle.Width < 2)
+				if (rectangle.Width < 1)
 				{
-					rectangle.Width = 2;
+					rectangle.Width = 1;
 				}
 			}
 			// рисуем вверх
@@ -647,9 +675,9 @@ namespace WpfApplication1
 			{
 				rectangle.Y = (int) (_secondPoint.Y + _rect.StrokeThickness);
 				rectangle.Height = (int) (_firstPoint.Y - _secondPoint.Y - _rect.StrokeThickness*2);
-				if (rectangle.Height < 2)
+				if (rectangle.Height < 1)
 				{
-					rectangle.Height = 2;
+					rectangle.Height = 1;
 				}
 			}
 				// рисуем вниз
@@ -657,15 +685,19 @@ namespace WpfApplication1
 			{
 				rectangle.Y = (int) (_firstPoint.Y + _rect.StrokeThickness);
 				rectangle.Height = (int) (_secondPoint.Y - _firstPoint.Y - _rect.StrokeThickness*2);
-				if (rectangle.Height < 2)
+				if (rectangle.Height < 1)
 				{
-					rectangle.Height = 2;
+					rectangle.Height = 1;
 				}
 			}
 			// в случае рисования квадратиков оранжевых
 			if (Type == 3)
 			{
-				_rect = new Rectangle {Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed};
+				if (_rect.Height * _rect.Width > 1.2)
+				{
+					_rect.Visibility = Visibility.Visible;
+				}
+				_rect = new Rectangle {Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed,Visibility = Visibility.Hidden};
 				CnvDraw.Children.Add(_rect);
 				_sqRect.Add(_rect);
 			}
@@ -699,15 +731,24 @@ namespace WpfApplication1
 		/// <param name="pointRightBottom">Правый нижний угол</param>
 		private void MoveDrawRectangle(Point pointLeftTop, Point pointRightBottom)
 		{
+			_defRectangle.Visibility = Visibility.Visible;
+			if (_rect.Height * _rect.Width > 1.2)
+			{
+				_rect.Visibility = Visibility.Visible;
+			}
+			else
+			{
+				_rect.Visibility = Visibility.Hidden;
+			}
 			_rectForDraw = new Int32Rect();
 			if (pointLeftTop.X > pointRightBottom.X)
 			{
 				Canvas.SetLeft(_rect, pointRightBottom.X);
 				_rect.Width = pointLeftTop.X - pointRightBottom.X;
 				_rectForDraw.X = (int) pointRightBottom.X;
-				if (_rect.Width < 2)
+				if (_rect.Width < 1)
 				{
-					_rect.Width = 2;
+					_rect.Width = 1;
 				}
 			}
 			else
@@ -715,9 +756,9 @@ namespace WpfApplication1
 				Canvas.SetLeft(_rect, pointLeftTop.X);
 				_rect.Width = pointRightBottom.X - pointLeftTop.X;
 				_rectForDraw.X = (int) pointLeftTop.X;
-				if (_rect.Width < 2)
+				if (_rect.Width < 1)
 				{
-					_rect.Width = 2;
+					_rect.Width = 1;
 				}
 			}
 			if (pointLeftTop.Y > pointRightBottom.Y)
@@ -725,9 +766,9 @@ namespace WpfApplication1
 				Canvas.SetTop(_rect, pointRightBottom.Y);
 				_rect.Height = pointLeftTop.Y - pointRightBottom.Y;
 				_rectForDraw.Y = (int) pointRightBottom.Y;
-				if (_rect.Height < 2)
+				if (_rect.Height < 1)
 				{
-					_rect.Height = 2;
+					_rect.Height = 1;
 				}
 			}
 			else
@@ -735,9 +776,9 @@ namespace WpfApplication1
 				Canvas.SetTop(_rect, pointLeftTop.Y);
 				_rect.Height = pointRightBottom.Y - pointLeftTop.Y;
 				_rectForDraw.Y = (int) pointLeftTop.Y;
-				if (_rect.Height < 2)
+				if (_rect.Height < 1)
 				{
-					_rect.Height = 2;
+					_rect.Height = 1;
 				}
 			}
 			_rectForDraw.Width = (int) _rect.Width;
@@ -745,11 +786,5 @@ namespace WpfApplication1
 		}
 
 		#endregion
-
-		private void ScaleTransform_Changed(object sender, EventArgs e)
-		{
-			CnvDraw.Height = ImgWell.Height;
-			CnvDraw.Width = ImgWell.Width;
-		}
 	}
 }

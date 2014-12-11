@@ -123,7 +123,7 @@
 					<Canvas.LayoutTransform>
 						<ScaleTransform
 							ScaleX="{Binding ElementName=SliZoom, Path=Value}"
-							ScaleY="{Binding ElementName=SliZoom, Path=Value}" Changed="ScaleTransform_Changed" />
+							ScaleY="{Binding ElementName=SliZoom, Path=Value}" />
 					</Canvas.LayoutTransform>
 				</Canvas>
 			</ScrollViewer>
