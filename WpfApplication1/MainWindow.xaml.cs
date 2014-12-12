@@ -222,6 +222,7 @@ namespace WpfApplication1
 		public static bool isFirstLine = false;
 		private void CnvDraw_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
+			myArgs = e;
 			// чтобы первая линия не строилась из начала координат
 			if(isFirstLine)
 			{
@@ -357,10 +358,35 @@ namespace WpfApplication1
 		private void CnvDraw_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			// удаление временных линий
-			CnvDraw.Children.Remove(_sLineGreen);
-			CnvDraw.Children.Remove(_sLineRed);
+			//CnvDraw.Children.Remove(_sLineGreen);
+			//CnvDraw.Children.Remove(_sLineRed);
+			ae = true;
+			try
+			{
+				if (Type == 1 && _sLineGreen.StartPoint.X == 0)
+					CnvDraw_MouseLeftButtonDown(null, e);
+				else if (_sLineGreen.StartPoint.X != 0)
+				{
+					//CnvDraw.Children.Remove(_sLineGreen);
+				}
+				if (Type == 2 && _sLineRed.StartPoint.X == 0)
+					CnvDraw_MouseLeftButtonDown(null, e);
+				else if (_sLineRed.StartPoint.X != 0)
+				{
+				//	CnvDraw.Children.Remove(_sLineRed);
+				}
+
+				xz();
+			}
+			catch (Exception)
+			{
+				
+				;
+			}
+			
 		}
 
+		private static MouseButtonEventArgs myArgs;
 		/// <summary>
 		///     Загрузка изображения
 		/// </summary>
@@ -450,11 +476,6 @@ namespace WpfApplication1
 			_rect = new Rectangle {Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed};
 			Canvas.SetTop(_rect, _firstPoint.Y);
 			Canvas.SetLeft(_rect, _firstPoint.X);
-			// для невидимости квадрата в начале координат
-			if (_rect.Height * _rect.Width < 4.5)
-			{
-				_rect.Visibility = Visibility.Hidden;
-			}
 			CnvDraw.Children.Add(_rect);
 			// добавление прямокгольника в список
 			_sqRect.Add(_rect);
@@ -530,89 +551,114 @@ namespace WpfApplication1
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		private static bool ae = false;
+
+		 void xz()
+		{
+				ae = false;
+			 try
+			 {
+				 if (Type == 1)
+				 {
+					 if (_plGreen.Points.Count > 2)
+					 {
+						 _plGreen.Points.Remove(_plGreen.Points.Last());
+						 _plGreen.Points.Remove(_plGreen.Points.Last());
+						 _sLineGreen.StartPoint = _plGreen.Points.Last();
+					 }
+					 else if (_plGreen.Points.Count > 0)
+					 {
+						 _plGreen.Points.Remove(_plGreen.Points.Last());
+						 _plGreen.Points.Remove(_plGreen.Points.Last());
+					//	 CnvDraw.Children.Remove(_tmpLineGreen);
+						 double x = _defRectangleFirst.X, y = _defRectangleFirst.Y;
+						 _sLineGreen.StartPoint = _defRectangleFirst;
+						 _sLineGreen.EndPoint = _defRectangleFirst;
+						 _tmpLineGreen.X1 = x;
+						 _tmpLineGreen.Y1 = y;
+						 _tmpLineGreen.X2 = x;
+						 _tmpLineGreen.Y2 = y;
+						 isFirstLine = true;
+						 CnvDraw.Children.Add(_tmpLineGreen);
+						 try
+						 {
+							 CnvDraw.Children.Add(_sLineGreen);
+						 }
+						 catch
+						 {
+						 }
+						 ;
+					 }
+				 }
+				 // удаление красной линии
+				 else if (Type == 2)
+				 {
+					 if (_plRed.Points.Count > 2)
+					 {
+						 _plRed.Points.Remove(_plRed.Points.Last());
+						 _plRed.Points.Remove(_plRed.Points.Last());
+						 _sLineRed.StartPoint = _plRed.Points.Last();
+					 }
+					 else if (_plRed.Points.Count > 0)
+					 {
+						 _plRed.Points.Remove(_plRed.Points.Last());
+						 _plRed.Points.Remove(_plRed.Points.Last());
+						// CnvDraw.Children.Remove(_tmpLineGreen);
+
+						 double x = _defRectangleFirst.X, y = _defRectangleFirst.Y;
+						 _sLineRed.StartPoint = _defRectangleFirst;
+						 _sLineRed.EndPoint = _defRectangleFirst;
+						 _tmpLineRed.X1 = x;
+						 _tmpLineRed.Y1 = y;
+						 _tmpLineRed.X2 = x;
+						 _tmpLineRed.Y2 = y;
+						 isFirstLine = true;
+
+
+						 CnvDraw.Children.Add(_tmpLineRed);
+						 try
+						 {
+							 CnvDraw.Children.Add(_sLineRed);
+						 }
+						 catch
+						 {
+						 }
+						 ;
+					 }
+				 }
+				 // удаление квадратиков
+				 else if (Type == 3)
+				 {
+					 try
+					 {
+						 CnvDraw.Children.Remove(_sqRect[_sqRect.Count - 2]);
+						 _sqRect.Remove(_sqRect[_sqRect.Count - 2]);
+					 }
+					 catch (Exception)
+					 {
+					 }
+				 }
+			 }
+			 catch (Exception)
+			 {
+			 }
+			
+}
 		private void CnvDraw_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.Key == Key.Escape)
+			try
 			{
-				// удаление зеленой линии
-				if (Type == 1)
+				if (e.Key == Key.Escape)
 				{
-					if (_plGreen.Points.Count > 2)
-					{
-						_plGreen.Points.Remove(_plGreen.Points.Last());
-						_plGreen.Points.Remove(_plGreen.Points.Last());
-						_sLineGreen.StartPoint = _plGreen.Points.Last();
-					}
-					else if (_plGreen.Points.Count > 0)
-					{
-						_plGreen.Points.Remove(_plGreen.Points.Last());
-						_plGreen.Points.Remove(_plGreen.Points.Last());
-						double x = _defRectangleFirst.X, y = _defRectangleFirst.Y;
-						_sLineGreen.StartPoint = _defRectangleFirst;
-						_sLineGreen.EndPoint = _defRectangleFirst;
-						_tmpLineGreen.X1 = x;
-						_tmpLineGreen.Y1 = y;
-						_tmpLineGreen.X2 = x;
-						_tmpLineGreen.Y2 = y;
-						isFirstLine = true;
-						CnvDraw.Children.Add(_tmpLineGreen);
-						try
-						{
-							CnvDraw.Children.Add(_sLineGreen);
-						}
-						catch
-						{
-						}
-						;
-					}
-				}
-				// удаление красной линии
-				else if (Type == 2)
-				{
-					if (_plRed.Points.Count > 2)
-					{
-						_plRed.Points.Remove(_plRed.Points.Last());
-						_plRed.Points.Remove(_plRed.Points.Last());
-						_sLineRed.StartPoint = _plRed.Points.Last();
-					}
-					else if (_plRed.Points.Count > 0)
-					{
-						_plRed.Points.Remove(_plRed.Points.Last());
-						_plRed.Points.Remove(_plRed.Points.Last());
-						double x = _defRectangleFirst.X, y = _defRectangleFirst.Y;
-						_sLineRed.StartPoint = _defRectangleFirst;
-						_sLineRed.EndPoint = _defRectangleFirst;
-						_tmpLineRed.X1 = x;
-						_tmpLineRed.Y1 = y;
-						_tmpLineRed.X2 = x;
-						_tmpLineRed.Y2 = y;
-						isFirstLine = true;
-
-						
-						CnvDraw.Children.Add(_tmpLineRed);
-						try
-						{
-							CnvDraw.Children.Add(_sLineRed);
-						}
-						catch
-						{
-						}
-						;
-					}
-				}
-				// удаление квадратиков
-				else if (Type == 3)
-				{
-					try
-					{
-						CnvDraw.Children.Remove(_sqRect[_sqRect.Count - 2]);
-						_sqRect.Remove(_sqRect[_sqRect.Count - 2]);
-					}
-					catch (Exception)
-					{
-					}
+					xz();			
 				}
 			}
+			catch (Exception)
+			{
+				
+				
+			}
+		
 		}
 
 		/// <summary>
