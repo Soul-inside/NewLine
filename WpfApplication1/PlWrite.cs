@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -56,6 +57,8 @@ namespace WpfApplication1
 			GradientStart = gradientStart;
 			GradientEnd = gradientEnd;
 		}
+
+	
 
 		/// <summary>
 		/// Получение строки
