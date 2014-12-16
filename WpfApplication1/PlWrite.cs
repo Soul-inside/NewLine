@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows;
 
 namespace WpfApplication1
 {
@@ -58,15 +51,13 @@ namespace WpfApplication1
 			GradientEnd = gradientEnd;
 		}
 
-	
-
 		/// <summary>
 		/// Получение строки
 		/// </summary>
 		/// <returns>Возвращает отформатированную строку</returns>
 		public override string ToString()
 		{
-			return string.Format(" {0} {1} {2} {3} {4}", Type, DepthStart, DepthEnd, GradientStart, GradientEnd);
+			return string.Format(" {0} {1} {2} {3} {4}", Type, Math.Round(DepthStart), Math.Round(DepthEnd), Math.Round(GradientStart, 2), Math.Round(GradientEnd, 2));
 		}
 	}
 	class RectWrite : PlWrite

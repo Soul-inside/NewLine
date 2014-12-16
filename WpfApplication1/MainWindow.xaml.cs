@@ -360,14 +360,24 @@ namespace WpfApplication1
 							_sLineGreen.StartPoint = new Point(_tmpLineGreen.X1, cy);
 							_sLineGreen.EndPoint = new Point(_tmpLineGreen.X1, cy);
 							CnvDraw.Children.Remove(_tmpLineGreen);
-							_plWrite.Add(new PlWrite(Type, _defRectangleFirst.Y, cy, _tmpLineGreen.X1, _tmpLineGreen.X1));
+							Replace();
+							depthStart = getRealCoord(_defRectangleFirst.Y, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+							depthEnd = getRealCoord(cy, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+							gradientStart = getRealCoord(_tmpLineGreen.X1, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
+							gradientEnd = gradientStart;
+							_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 						}
 						else
 						{
 							_plGreen.Points.Add(new Point(cx, _sLineGreen.StartPoint.Y));
 							_plGreen.Points.Add(new Point(cx, cy));
 							_sLineGreen.StartPoint = _sLineGreen.EndPoint;
-							_plWrite.Add(new PlWrite(Type, _plGreen.Points[_plGreen.Points.Count - 2].Y, cy, cx, cx));
+							Replace();
+							depthStart = getRealCoord(_plGreen.Points[_plGreen.Points.Count - 2].Y, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+							depthEnd = getRealCoord(cy, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+							gradientStart = getRealCoord(cx, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
+							gradientEnd = gradientStart;
+							_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 						}
 					}
 				}
@@ -381,7 +391,6 @@ namespace WpfApplication1
 							_plRed.Points.Add(new Point(cx, _defRectangleFirst.Y));
 							_tmpLineRed.X1 = cx;
 							_tmpLineRed.Y1 = _defRectangleFirst.Y;
-							_plWrite.Add(new PlWrite(Type, 0, _defRectangleFirst.Y, cx, cx));
 						}
 						else if (_plRed.Points.Count() < 2)
 						{
@@ -389,18 +398,28 @@ namespace WpfApplication1
 							_sLineRed.StartPoint = new Point(_tmpLineRed.X1, cy);
 							_sLineRed.EndPoint = new Point(_tmpLineRed.X1, cy);
 							CnvDraw.Children.Remove(_tmpLineRed);
-							_plWrite.Add(new PlWrite(Type, _defRectangleFirst.Y, cy, _tmpLineGreen.X1, _tmpLineGreen.X1));
+							Replace();
+							depthStart = getRealCoord(_defRectangleFirst.Y, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+							depthEnd = getRealCoord(cy, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+							gradientStart = getRealCoord(_tmpLineRed.X1, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
+							gradientEnd = gradientStart;
+							_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 						}
 						else
 						{
 							_plRed.Points.Add(new Point(cx, _sLineRed.StartPoint.Y));
 							_plRed.Points.Add(new Point(cx, cy));
 							_sLineRed.StartPoint = _sLineRed.EndPoint;
-							_plWrite.Add(new PlWrite(Type, _sLineGreen.StartPoint.Y, cy, cx, cx));
+							Replace();
+							depthStart = getRealCoord(_plRed.Points[_plRed.Points.Count - 2].Y, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+							depthEnd = getRealCoord(cy, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+							gradientStart = getRealCoord(cx, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
+							gradientEnd = gradientStart;
+							_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 						}
 					}
 				}
-				// в случае рисавания квадратиков
+				// в случае рисования квадратиков
 				else
 				{
 					_firstPoint = e.GetPosition(CnvDraw);
@@ -586,7 +605,25 @@ namespace WpfApplication1
 				_rect = new Rectangle { Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed, Visibility = Visibility.Hidden };
 				CnvDraw.Children.Add(_rect);
 				_sqRect.Add(_rect);
-				// выделить в функцию
+				Replace();
+				gradientStart = getRealCoord(_firstPoint.X, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
+				gradientEnd = getRealCoord(_secondPoint.X, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
+				depthStart = getRealCoord(_firstPoint.Y, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+				depthEnd = getRealCoord(_secondPoint.Y, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
+				_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
+			}
+			// переопределение точек области определения, если область определения рисуется не сверху вниз
+			if (Type == 0)
+			{
+				OverrideRect();
+			}
+		}
+
+		/// <summary>
+		/// Замена разделителя у чисел, заданных пользователем
+		/// </summary>
+		private void Replace()
+			{
 				var ci = new CultureInfo("en-US") { NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." } };
 				try
 				{
@@ -598,17 +635,20 @@ namespace WpfApplication1
 				catch (Exception)
 				{
 				}
-				gradientStart = Math.Abs((_firstPoint.X - _defRectangleFirst.X) / (_defRectangle.Width) * (xmax - xmin) + xmin);
-				gradientEnd = Math.Abs((_secondPoint.X - _defRectangleFirst.X) / (_defRectangle.Width) * (xmax - xmin) + xmin);
-				depthStart = Math.Abs((_firstPoint.Y - _defRectangleFirst.Y) / (_defRectangle.Height) * (ymax - ymin) + ymin);
-				depthEnd = Math.Abs((_secondPoint.Y - _defRectangleFirst.Y) / (_defRectangle.Height) * (ymax - ymin) + ymin);
-				_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 			}
-			// переопределение точек области определения, если область определения рисуется не сверху вниз
-			if (Type == 0)
-			{
-				OverrideRect();
-			}
+
+		/// <summary>
+		/// Вычисление координат фигуры в заданной системе координат
+		/// </summary>
+		/// <param name="coordAxis">Координата по заданной оси</param>
+		/// <param name="coordDomain">Начальная координата области определения</param>
+		/// <param name="sizeDomain">Ширина/Высота области определения</param>
+		/// <param name="finalValue">Конечное значение градиента/глубины</param>
+		/// <param name="initValue">Начальное значение градиента/глубины</param>
+		/// <returns></returns>
+		private double getRealCoord( double coordAxis, double coordDomain, double sizeDomain, double finalValue, double initValue)
+		{
+			return(Math.Abs((coordAxis-coordDomain)/sizeDomain*(finalValue-initValue)+initValue));
 		}
 
 		/// <summary>
@@ -886,10 +926,6 @@ namespace WpfApplication1
 			foreach (var item in _rectWrite)
 			{
 				sw.WriteLine(item);
-			}
-			foreach (var item in _plGreen.Points)
-			{
-				sw.WriteLine(Convert.ToString(item) + "\n");
 			}
 			sw.Close();
 		}
