@@ -2,7 +2,7 @@
 
 namespace WpfApplication1
 {
-	class PlWrite
+	class CoordRecord
 	{
 		/// <summary>
 		/// Тип линии
@@ -38,7 +38,7 @@ namespace WpfApplication1
 		/// <param name="deptEnd">Глубина до</param>
 		/// <param name="pressureStart">Градиент от</param>
 		/// <param name="pressureEnd">Градиент до</param>
-		public PlWrite( int type,
+		public CoordRecord( int type,
 							double depthStart,
 							double depthEnd,
 							double gradientStart,
@@ -58,15 +58,6 @@ namespace WpfApplication1
 		public override string ToString()
 		{
 			return string.Format(" {0} {1} {2} {3} {4}", Type, Math.Round(DepthStart), Math.Round(DepthEnd), Math.Round(GradientStart, 2), Math.Round(GradientEnd, 2));
-		}
-	}
-	class RectWrite : PlWrite
-	{
-		public RectWrite(int type,
-			double depthStart,
-			double depthEnd, double gradientStart, double gradientEnd)
-			: base(type, depthStart, depthEnd, gradientStart, gradientEnd)
-		{
 		}
 	}
 	}

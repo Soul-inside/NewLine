@@ -22,10 +22,10 @@ namespace WpfApplication1
 	{
 		#region init
 
-		public static bool isFirstLine = false;
+		private static bool isFirstLine = false;
 
 		/// <summary>
-		///     координаты прямоугольника для выделения области
+		///     Координаты прямоугольника выделения области
 		/// </summary>
 		private static Rectangle _defRectangle = new Rectangle();
 
@@ -77,17 +77,12 @@ namespace WpfApplication1
 		/// <summary>
 		///     Тип линии
 		/// </summary>
-		public int Type = -1;
+		private int Type = -1;
 
 		/// <summary>
-		///     Список всех нарисованных квадратов
+		///     Список всех координат
 		/// </summary>
-		private readonly List<RectWrite> _rectWrite = new List<RectWrite>();
-
-		/// <summary>
-		///     Список всех нарисованных линий
-		/// </summary>
-		private readonly List<PlWrite> _plWrite = new List<PlWrite>();
+		private readonly List<CoordRecord> _coordRecord = new List<CoordRecord>();
 
 		/// <summary>
 		///     Первая точка на экране, с которой начинается выделение прямоугольника (Левая верхняя)
@@ -117,42 +112,42 @@ namespace WpfApplication1
 		/// <summary>
 		/// Глубина от
 		/// </summary>
-		public double depthStart;
+		private double depthStart;
 
 		/// <summary>
 		/// Глубина до
 		/// </summary>
-		public double depthEnd;
+		private double depthEnd;
 
 		/// <summary>
 		/// Градиент от
 		/// </summary>
-		public double gradientStart;
+		private double gradientStart;
 
 		/// <summary>
 		/// Градиент до
 		/// </summary>
-		public double gradientEnd;
+		private double gradientEnd;
 
 		/// <summary>
 		/// Начальное значение градиента, введенное пользователем
 		/// </summary>
-		public double xmin;
+		private double xmin;
 
 		/// <summary>
 		/// Конечное значение градиента, введенное пользователем
 		/// </summary>
-		public double xmax;
+		private double xmax;
 
 		/// <summary>
 		/// Начальное значение глубины, введенное пользователем
 		/// </summary>
-		public double ymin;
+		private double ymin;
 
 		/// <summary>
 		/// Конечное значение глубины, введенное пользователем
 		/// </summary>
-		public double ymax;
+		private double ymax;
 
 		#endregion
 
@@ -365,7 +360,7 @@ namespace WpfApplication1
 							depthEnd = getRealCoord(cy, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
 							gradientStart = getRealCoord(_tmpLineGreen.X1, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
 							gradientEnd = gradientStart;
-							_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
+							_coordRecord.Add(new CoordRecord(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 						}
 						else
 						{
@@ -377,7 +372,7 @@ namespace WpfApplication1
 							depthEnd = getRealCoord(cy, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
 							gradientStart = getRealCoord(cx, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
 							gradientEnd = gradientStart;
-							_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
+							_coordRecord.Add(new CoordRecord(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 						}
 					}
 				}
@@ -403,7 +398,7 @@ namespace WpfApplication1
 							depthEnd = getRealCoord(cy, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
 							gradientStart = getRealCoord(_tmpLineRed.X1, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
 							gradientEnd = gradientStart;
-							_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
+							_coordRecord.Add(new CoordRecord(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 						}
 						else
 						{
@@ -415,7 +410,7 @@ namespace WpfApplication1
 							depthEnd = getRealCoord(cy, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
 							gradientStart = getRealCoord(cx, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
 							gradientEnd = gradientStart;
-							_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
+							_coordRecord.Add(new CoordRecord(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 						}
 					}
 				}
@@ -610,7 +605,7 @@ namespace WpfApplication1
 				gradientEnd = getRealCoord(_secondPoint.X, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
 				depthStart = getRealCoord(_firstPoint.Y, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
 				depthEnd = getRealCoord(_secondPoint.Y, _defRectangleFirst.Y, _defRectangle.Height, ymax, ymin);
-				_rectWrite.Add(new RectWrite(Type, depthStart, depthEnd, gradientStart, gradientEnd));
+				_coordRecord.Add(new CoordRecord(Type, depthStart, depthEnd, gradientStart, gradientEnd));
 			}
 			// переопределение точек области определения, если область определения рисуется не сверху вниз
 			if (Type == 0)
@@ -697,7 +692,7 @@ namespace WpfApplication1
 		}
 
 		/// <summary>
-		///     Удаляет последнюю линию
+		///     Удаляет последнюю нарисованную линию
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -919,11 +914,7 @@ namespace WpfApplication1
 		{
 			var sw = new StreamWriter("output.txt");
 			sw.WriteLine("Тип Глубина от Глубина до Давление от Давление до");
-			foreach (var item in _plWrite)
-			{
-				sw.WriteLine(item);
-			}
-			foreach (var item in _rectWrite)
+			foreach (var item in _coordRecord)
 			{
 				sw.WriteLine(item);
 			}
