@@ -51,6 +51,10 @@ namespace WpfApplication1
 			GradientEnd = gradientEnd;
 		}
 
+		public CoordRecord()
+		{
+		}
+
 		/// <summary>
 		/// Получение строки
 		/// </summary>

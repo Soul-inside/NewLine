@@ -1,4 +1,4 @@
-﻿// Last Change: 2014 12 12 13:26
+﻿// Last Change: 2014 12 17 8:53
 
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace WpfApplication1
 	{
 		#region init
 
-		private static bool isFirstLine = false;
+		private static bool isFirstLine;
 
 		/// <summary>
 		///     Координаты прямоугольника выделения области
@@ -110,44 +110,49 @@ namespace WpfApplication1
 		private bool _drawRectangle;
 
 		/// <summary>
-		/// Глубина от
+		///     Глубина от
 		/// </summary>
 		private double depthStart;
 
 		/// <summary>
-		/// Глубина до
+		///     Глубина до
 		/// </summary>
 		private double depthEnd;
 
 		/// <summary>
-		/// Градиент от
+		///     Градиент от
 		/// </summary>
 		private double gradientStart;
 
 		/// <summary>
-		/// Градиент до
+		///     Градиент до
 		/// </summary>
 		private double gradientEnd;
 
 		/// <summary>
-		/// Начальное значение градиента, введенное пользователем
+		///     Начальное значение градиента, введенное пользователем
 		/// </summary>
 		private double xmin;
 
 		/// <summary>
-		/// Конечное значение градиента, введенное пользователем
+		///     Конечное значение градиента, введенное пользователем
 		/// </summary>
 		private double xmax;
 
 		/// <summary>
-		/// Начальное значение глубины, введенное пользователем
+		///     Начальное значение глубины, введенное пользователем
 		/// </summary>
 		private double ymin;
 
 		/// <summary>
-		/// Конечное значение глубины, введенное пользователем
+		///     Конечное значение глубины, введенное пользователем
 		/// </summary>
 		private double ymax;
+
+		/// <summary>
+		///     Переопределенные точки прямоугольника
+		/// </summary>
+		private KeyValuePair<Point, Point> overridePoint;
 
 		#endregion
 
@@ -212,7 +217,7 @@ namespace WpfApplication1
 			// в случае повторного выделения области
 			BtClear_Click(null, null);
 			CnvDraw.Children.Remove(_rect);
-			_rect = new Rectangle { Stroke = Brushes.Red, StrokeThickness = 2, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
+			_rect = new Rectangle {Stroke = Brushes.Red, StrokeThickness = 2, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top};
 			Canvas.SetTop(_rect, _firstPoint.Y);
 			Canvas.SetLeft(_rect, _firstPoint.X);
 			CnvDraw.Children.Add(_rect);
@@ -262,7 +267,6 @@ namespace WpfApplication1
 		private void BtRed_Click(object sender, RoutedEventArgs e)
 		{
 			isFirstLine = true;
-
 			Type = 2;
 			try
 			{
@@ -290,7 +294,7 @@ namespace WpfApplication1
 		private void BtOrange_Click(object sender, RoutedEventArgs e)
 		{
 			Type = 3;
-			_rect = new Rectangle { Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed };
+			_rect = new Rectangle {Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed};
 			Canvas.SetTop(_rect, _firstPoint.Y);
 			Canvas.SetLeft(_rect, _firstPoint.X);
 			CnvDraw.Children.Add(_rect);
@@ -376,7 +380,7 @@ namespace WpfApplication1
 						}
 					}
 				}
-				// для рисования красной линии
+					// для рисования красной линии
 				else if (Type == 2)
 				{
 					if (CnvDraw.Children.Contains(_sLineRed))
@@ -414,7 +418,7 @@ namespace WpfApplication1
 						}
 					}
 				}
-				// в случае рисования квадратиков
+					// в случае рисования квадратов
 				else
 				{
 					_firstPoint = e.GetPosition(CnvDraw);
@@ -423,7 +427,7 @@ namespace WpfApplication1
 					{
 						_defRectangleFirst = _firstPoint;
 					}
-					// для попадания квадратиков в область определения
+					// для попадания квадратов в область определения
 					if (Type == 3)
 					{
 						if (_firstPoint.Y > _defRectangleSecond.Y)
@@ -452,7 +456,6 @@ namespace WpfApplication1
 				MessageBox.Show("Задайте область определения!", "Внимание");
 			}
 		}
-
 
 		/// <summary>
 		///     Движение мыши по канвасу
@@ -553,8 +556,8 @@ namespace WpfApplication1
 			// рисуем влево
 			if (_firstPoint.X > _secondPoint.X)
 			{
-				rectangle.X = (int)(_secondPoint.X + _rect.StrokeThickness);
-				rectangle.Width = (int)(_firstPoint.X - _secondPoint.X - _rect.StrokeThickness * 2);
+				rectangle.X = (int) (_secondPoint.X + _rect.StrokeThickness);
+				rectangle.Width = (int) (_firstPoint.X - _secondPoint.X - _rect.StrokeThickness*2);
 				if (rectangle.Width < 1)
 				{
 					rectangle.Width = 1;
@@ -563,8 +566,8 @@ namespace WpfApplication1
 			// рисуем вправо
 			else
 			{
-				rectangle.X = (int)(_firstPoint.X);
-				rectangle.Width = (int)(_secondPoint.X - _firstPoint.X);
+				rectangle.X = (int) (_firstPoint.X);
+				rectangle.Width = (int) (_secondPoint.X - _firstPoint.X);
 				if (rectangle.Width < 1)
 				{
 					rectangle.Width = 1;
@@ -573,8 +576,8 @@ namespace WpfApplication1
 			// рисуем вверх
 			if (_firstPoint.Y > _secondPoint.Y)
 			{
-				rectangle.Y = (int)(_secondPoint.Y + _rect.StrokeThickness);
-				rectangle.Height = (int)(_firstPoint.Y - _secondPoint.Y - _rect.StrokeThickness * 2);
+				rectangle.Y = (int) (_secondPoint.Y + _rect.StrokeThickness);
+				rectangle.Height = (int) (_firstPoint.Y - _secondPoint.Y - _rect.StrokeThickness*2);
 				if (rectangle.Height < 1)
 				{
 					rectangle.Height = 1;
@@ -583,8 +586,8 @@ namespace WpfApplication1
 			// рисуем вниз
 			else
 			{
-				rectangle.Y = (int)(_firstPoint.Y + _rect.StrokeThickness);
-				rectangle.Height = (int)(_secondPoint.Y - _firstPoint.Y - _rect.StrokeThickness * 2);
+				rectangle.Y = (int) (_firstPoint.Y + _rect.StrokeThickness);
+				rectangle.Height = (int) (_secondPoint.Y - _firstPoint.Y - _rect.StrokeThickness*2);
 				if (rectangle.Height < 1)
 				{
 					rectangle.Height = 1;
@@ -593,13 +596,16 @@ namespace WpfApplication1
 			// в случае рисования квадратиков оранжевых
 			if (Type == 3)
 			{
-				if (_rect.Height * _rect.Width > 1.2)
+				if (_rect.Height*_rect.Width > 1.2)
 				{
 					_rect.Visibility = Visibility.Visible;
 				}
-				_rect = new Rectangle { Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed, Visibility = Visibility.Hidden };
+				_rect = new Rectangle {Stroke = Brushes.Black, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top, Fill = Brushes.OrangeRed, Visibility = Visibility.Hidden};
 				CnvDraw.Children.Add(_rect);
 				_sqRect.Add(_rect);
+				overridePoint = OverrideRect(_firstPoint, _secondPoint);
+				_firstPoint = overridePoint.Key;
+				_secondPoint = overridePoint.Value;
 				Replace();
 				gradientStart = getRealCoord(_firstPoint.X, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
 				gradientEnd = getRealCoord(_secondPoint.X, _defRectangleFirst.X, _defRectangle.Width, xmax, xmin);
@@ -610,30 +616,32 @@ namespace WpfApplication1
 			// переопределение точек области определения, если область определения рисуется не сверху вниз
 			if (Type == 0)
 			{
-				OverrideRect();
+				overridePoint = OverrideRect(_defRectangleFirst, _defRectangleSecond);
+				_defRectangleFirst = overridePoint.Key;
+				_defRectangleSecond = overridePoint.Value;
 			}
 		}
 
 		/// <summary>
-		/// Замена разделителя у чисел, заданных пользователем
+		///     Замена разделителя у чисел, заданных пользователем
 		/// </summary>
 		private void Replace()
+		{
+			var ci = new CultureInfo("en-US") {NumberFormat = new NumberFormatInfo {NumberDecimalSeparator = "."}};
+			try
 			{
-				var ci = new CultureInfo("en-US") { NumberFormat = new NumberFormatInfo { NumberDecimalSeparator = "." } };
-				try
-				{
-					xmin = Convert.ToDouble(TbXmin.Text.Replace(",", ".").Replace("ю", ".").Replace("б", "."), ci);
-					xmax = Convert.ToDouble(TbXmax.Text.Replace(",", ".").Replace("ю", ".").Replace("б", "."), ci);
-					ymin = Convert.ToDouble(TbYmin.Text.Replace(",", ".").Replace("ю", ".").Replace("б", "."), ci);
-					ymax = Convert.ToDouble(TbYmax.Text.Replace(",", ".").Replace("ю", ".").Replace("б", "."), ci);
-				}
-				catch (Exception)
-				{
-				}
+				xmin = Convert.ToDouble(TbXmin.Text.Replace(",", ".").Replace("ю", ".").Replace("б", "."), ci);
+				xmax = Convert.ToDouble(TbXmax.Text.Replace(",", ".").Replace("ю", ".").Replace("б", "."), ci);
+				ymin = Convert.ToDouble(TbYmin.Text.Replace(",", ".").Replace("ю", ".").Replace("б", "."), ci);
+				ymax = Convert.ToDouble(TbYmax.Text.Replace(",", ".").Replace("ю", ".").Replace("б", "."), ci);
 			}
+			catch (Exception)
+			{
+			}
+		}
 
 		/// <summary>
-		/// Вычисление координат фигуры в заданной системе координат
+		///     Вычисление координат фигуры в заданной системе координат
 		/// </summary>
 		/// <param name="coordAxis">Координата по заданной оси</param>
 		/// <param name="coordDomain">Начальная координата области определения</param>
@@ -641,9 +649,9 @@ namespace WpfApplication1
 		/// <param name="finalValue">Конечное значение градиента/глубины</param>
 		/// <param name="initValue">Начальное значение градиента/глубины</param>
 		/// <returns></returns>
-		private double getRealCoord( double coordAxis, double coordDomain, double sizeDomain, double finalValue, double initValue)
+		private double getRealCoord(double coordAxis, double coordDomain, double sizeDomain, double finalValue, double initValue)
 		{
-			return(Math.Abs((coordAxis-coordDomain)/sizeDomain*(finalValue-initValue)+initValue));
+			return (Math.Abs((coordAxis - coordDomain)/sizeDomain*(finalValue - initValue) + initValue));
 		}
 
 		/// <summary>
@@ -660,7 +668,6 @@ namespace WpfApplication1
 			_plGreen.Points.Clear();
 			_sLineGreen.EndPoint = new Point();
 			_sLineGreen.StartPoint = new Point();
-
 			// удаление красных линий
 			CnvDraw.Children.Remove(_sLineRed);
 			CnvDraw.Children.Remove(_plRed);
@@ -668,7 +675,8 @@ namespace WpfApplication1
 			_plRed.Points.Clear();
 			_sLineRed.EndPoint = new Point();
 			_sLineRed.StartPoint = new Point();
-
+			//удаление записи о координатах
+			_coordRecord.Clear();
 			// удаление квадратов
 			foreach (Rectangle item in _sqRect)
 			{
@@ -706,6 +714,22 @@ namespace WpfApplication1
 					{
 						if (Type == 1)
 						{
+							// удаление последней записи о координатах зеленой линии
+							CoordRecord obj = new CoordRecord();
+							foreach (var item in _coordRecord)
+							{
+								if (item.Type == 1)
+								{
+									obj = item;
+								}
+							}
+							try
+							{
+								_coordRecord.Remove(obj);
+							}
+							catch (Exception ex)
+							{
+							}
 							if (_plGreen.Points.Count > 2)
 							{
 								_plGreen.Points.Remove(_plGreen.Points.Last());
@@ -716,7 +740,6 @@ namespace WpfApplication1
 							{
 								_plGreen.Points.Remove(_plGreen.Points.Last());
 								_plGreen.Points.Remove(_plGreen.Points.Last());
-								//	CnvDraw.Children.Remove(_tmpLineGreen);
 								double x = _defRectangleFirst.X, y = _defRectangleFirst.Y;
 								_sLineGreen.StartPoint = _defRectangleFirst;
 								_sLineGreen.EndPoint = _defRectangleFirst;
@@ -733,12 +756,27 @@ namespace WpfApplication1
 								catch
 								{
 								}
-								;
 							}
 						}
-						// удаление красной линии
+							// удаление красной линии
 						else if (Type == 2)
 						{
+							// удаление последней записи о координатах красной линии
+							CoordRecord obj = new CoordRecord();
+							foreach (var item in _coordRecord)
+							{
+								if (item.Type == 2)
+								{
+									obj = item;
+								}
+							}
+							try
+							{
+								_coordRecord.Remove(obj);
+							}
+							catch (Exception ex)
+							{
+							}
 							if (_plRed.Points.Count > 2)
 							{
 								_plRed.Points.Remove(_plRed.Points.Last());
@@ -749,8 +787,6 @@ namespace WpfApplication1
 							{
 								_plRed.Points.Remove(_plRed.Points.Last());
 								_plRed.Points.Remove(_plRed.Points.Last());
-								// CnvDraw.Children.Remove(_tmpLineGreen);
-
 								double x = _defRectangleFirst.X, y = _defRectangleFirst.Y;
 								_sLineRed.StartPoint = _defRectangleFirst;
 								_sLineRed.EndPoint = _defRectangleFirst;
@@ -759,7 +795,6 @@ namespace WpfApplication1
 								_tmpLineRed.X2 = x;
 								_tmpLineRed.Y2 = y;
 								isFirstLine = true;
-
 								CnvDraw.Children.Add(_tmpLineRed);
 								try
 								{
@@ -771,11 +806,27 @@ namespace WpfApplication1
 								;
 							}
 						}
-						// удаление квадратиков
+							// удаление квадратов
 						else if (Type == 3)
 						{
 							try
 							{
+								// удаление последней записи о координатах квадратов
+								CoordRecord obj = new CoordRecord();
+								foreach (var item in _coordRecord)
+								{
+									if (item.Type == 3)
+									{
+										obj = item;
+									}
+								}
+								try
+								{
+									_coordRecord.Remove(obj);
+								}
+								catch (Exception ex)
+								{
+								}
 								CnvDraw.Children.Remove(_sqRect[_sqRect.Count - 2]);
 								_sqRect.Remove(_sqRect[_sqRect.Count - 2]);
 							}
@@ -809,6 +860,7 @@ namespace WpfApplication1
 				}
 				else if (_plGreen.Points.Count > 0)
 				{
+					CnvDraw.Children.Remove(_tmpLineGreen);
 					isFirstLine = true;
 					_sLineGreen.EndPoint = new Point();
 					_sLineGreen.StartPoint = new Point();
@@ -822,6 +874,7 @@ namespace WpfApplication1
 				}
 				else if (_plRed.Points.Count > 0)
 				{
+					CnvDraw.Children.Remove(_tmpLineRed);
 					isFirstLine = true;
 					_sLineRed.EndPoint = new Point();
 					_sLineRed.StartPoint = new Point();
@@ -832,16 +885,19 @@ namespace WpfApplication1
 		/// <summary>
 		///     Переопределение точек выделения области определения
 		/// </summary>
-		private static void OverrideRect()
+		/// <param name="startConstructionPoint">Первая точка, с которой началось построение прямоугольника</param>
+		/// <param name="endConstructionPoint">Вторая точка, с которой началось построение прямоугольника</param>
+		private static KeyValuePair<Point, Point> OverrideRect(Point startConstructionPoint, Point endConstructionPoint)
 		{
 			var p1 = new Point();
 			var p2 = new Point();
-			p1.X = Math.Min(_defRectangleFirst.X, _defRectangleSecond.X);
-			p1.Y = Math.Min(_defRectangleFirst.Y, _defRectangleSecond.Y);
-			p2.X = Math.Max(_defRectangleFirst.X, _defRectangleSecond.X);
-			p2.Y = Math.Max(_defRectangleFirst.Y, _defRectangleSecond.Y);
-			_defRectangleFirst = p1;
-			_defRectangleSecond = p2;
+			p1.X = Math.Min(startConstructionPoint.X, endConstructionPoint.X);
+			p1.Y = Math.Min(startConstructionPoint.Y, endConstructionPoint.Y);
+			p2.X = Math.Max(startConstructionPoint.X, endConstructionPoint.X);
+			p2.Y = Math.Max(startConstructionPoint.Y, endConstructionPoint.Y);
+			startConstructionPoint = p1;
+			endConstructionPoint = p2;
+			return new KeyValuePair<Point, Point>(p1, p2);
 		}
 
 		/// <summary>
@@ -920,7 +976,6 @@ namespace WpfApplication1
 			}
 			sw.Close();
 		}
-
 		#endregion
 	}
 }
