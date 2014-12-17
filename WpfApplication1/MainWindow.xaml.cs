@@ -858,26 +858,12 @@ namespace WpfApplication1
 				{
 					CnvDraw.Children.Remove(_sLineGreen);
 				}
-				else if (_plGreen.Points.Count > 0)
-				{
-					CnvDraw.Children.Remove(_tmpLineGreen);
-					isFirstLine = true;
-					_sLineGreen.EndPoint = new Point();
-					_sLineGreen.StartPoint = new Point();
-				}
 			}
 			if (Type == 2)
 			{
 				if (_plRed.Points.Count > 1)
 				{
 					CnvDraw.Children.Remove(_sLineRed);
-				}
-				else if (_plRed.Points.Count > 0)
-				{
-					CnvDraw.Children.Remove(_tmpLineRed);
-					isFirstLine = true;
-					_sLineRed.EndPoint = new Point();
-					_sLineRed.StartPoint = new Point();
 				}
 			}
 		}
