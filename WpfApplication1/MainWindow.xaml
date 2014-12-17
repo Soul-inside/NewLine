@@ -36,14 +36,6 @@
 				Margin="5"/>
 				<TextBox Name="TbYmax"
 				Margin="5" Text="4250"/>
-				<Label Content="Начальная точка:"
-				Margin="5"/>
-				<Label Name="X"
-				Margin="5"/>
-				<Label Content="Конечная точка:"
-				Margin="5"/>
-				<Label Name="Y"
-				Margin="5"/>
 				<Button Name="BtGreen"
 					Content="Зеленая линия"
 					Click="BtGreen_Click"
