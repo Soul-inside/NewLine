@@ -61,7 +61,7 @@ namespace WpfApplication1
 		/// <returns>Возвращает отформатированную строку</returns>
 		public override string ToString()
 		{
-			return string.Format(" {0} {1} {2} {3} {4}", Type, Math.Round(DepthStart), Math.Round(DepthEnd), Math.Round(GradientStart, 2), Math.Round(GradientEnd, 2));
+			return string.Format(" {0} \t\t {1} \t\t {2} \t\t {3} \t\t {4}", Type, Math.Round(DepthStart), Math.Round(DepthEnd), Math.Round(GradientStart, 2), Math.Round(GradientEnd, 2));
 		}
 	}
 	}

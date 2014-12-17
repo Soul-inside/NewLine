@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Compile Include="CoordRecord.cs" />
+    <Compile Include="Rect.cs" />
     <Compile Include="SquareLine.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

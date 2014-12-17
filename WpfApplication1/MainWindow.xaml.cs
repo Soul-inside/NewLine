@@ -969,7 +969,7 @@ namespace WpfApplication1
 		private void BtWriteToFile_Click(object sender, RoutedEventArgs e)
 		{
 			var sw = new StreamWriter("output.txt");
-			sw.WriteLine("Тип Глубина от Глубина до Давление от Давление до");
+			sw.WriteLine("Тип" + '\t' + "   Глубина от" + '\t' + "   Глубина до" + '\t' + "   Давление от" + '\t' + "   Давление до");
 			foreach (var item in _coordRecord)
 			{
 				sw.WriteLine(item);

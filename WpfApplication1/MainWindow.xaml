@@ -10,15 +10,13 @@
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<StackPanel Grid.Column="0">
-				<Button Name="BtImageLoad"
-					Content="Загрузить изображение"
+				<Button Content="Загрузить изображение"
 					Margin="5" Click="BtImageLoad_Click"/>
-				<Button Name="BtSelectArea"
-					Content="Задать область определения"
+				<Button Content="Задать область определения"
 					Margin="5" Click="BtSelectArea_Click" />
-				<Button Name="BtWriteToFile" Content="Записать в файл"
+				<Button Content="Записать в файл"
 					Margin="5" Click="BtWriteToFile_Click"/>
-				<Button Name="BtClear" Content="Очистить"
+				<Button Content="Очистить"
 					Margin="5" Click="BtClear_Click"/>
 				<Label Content="Начальное значение градиента"
 				Margin="5"/>
@@ -36,8 +34,7 @@
 				Margin="5"/>
 				<TextBox Name="TbYmax"
 				Margin="5" Text="4250"/>
-				<Button Name="BtGreen"
-					Content="Зеленая линия"
+				<Button Content="Зеленая линия"
 					Click="BtGreen_Click"
 				Margin="5" >
 					<Button.Background>
@@ -49,8 +46,7 @@
 						</LinearGradientBrush>
 					</Button.Background>
 				</Button>
-				<Button Name="BtRed"
-					Content="Красная линия"
+				<Button Content="Красная линия"
 					Click="BtRed_Click"
 				Margin="5" >
 					<Button.Background>
@@ -62,8 +58,7 @@
 						</LinearGradientBrush>
 					</Button.Background>
 				</Button>
-				<Button Name="BtOrange"
-						Content="Оранжевая линия"
+				<Button Content="Оранжевая линия"
 						Click="BtOrange_Click"
 					Margin="5">
 					<Button.Background>
@@ -94,7 +89,7 @@
 					</Slider.RenderTransform>
 				</Slider>
 			</StackPanel>
-			<ScrollViewer Name="ScViewer"
+			<ScrollViewer
 					HorizontalScrollBarVisibility="Auto"
 					Grid.Column="1">
 				<Canvas x:Name="CnvDraw"
